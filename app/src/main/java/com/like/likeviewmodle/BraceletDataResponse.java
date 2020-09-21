@@ -25,8 +25,15 @@ class BraceletDataResponse {
 
         AppDatabase appDatabase = DbHelper.getInstance(context);
         braceletDao = appDatabase.braceletDao();
-        List<BraceletLocalData> all = braceletDao.getAll();
-        Log.d("BraceletDataResponse", "all:" + all);
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                List<BraceletLocalData> all = braceletDao.getAll();
+                Log.d("BraceletDataResponse", "all:" + all);
+            }
+        };
+
     }
 
     public boolean setBraceletData(BraceletLocalData braceletLocalData){

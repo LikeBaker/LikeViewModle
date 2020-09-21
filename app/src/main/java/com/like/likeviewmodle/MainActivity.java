@@ -101,7 +101,14 @@ public class MainActivity extends AppCompatActivity {
         mBraceletData.setTemp("4");
         mViewModel.doAction();
 
-        List<BraceletLocalData> braceletData = braceletDataResponse.getBraceletData();
-        Log.d("MainActivity", "braceletData:" + braceletData);
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                List<BraceletLocalData> braceletData = braceletDataResponse.getBraceletData();
+                Log.d("MainActivity", "braceletData:" + braceletData);
+            }
+        }.start();
+
     }
 }
