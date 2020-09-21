@@ -20,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         content = findViewById(R.id.tv_content);
 
-        mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BraceletDataModule.class);
+//        mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BraceletDataModule.class);
+         mViewModel = ViewModelProviders.of(this).get(BraceletDataModule.class);
+
 
         mViewModel.getBraceletLiveData().observe(this, new Observer<BraceletData>() {
             @Override
