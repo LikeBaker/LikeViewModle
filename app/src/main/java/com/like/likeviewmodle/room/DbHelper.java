@@ -20,7 +20,7 @@ public class DbHelper extends AppDatabase {
     public static synchronized AppDatabase getInstance(Context context){
         if (mAppDatabase == null) {
             mAppDatabase = Room.databaseBuilder(context.getApplicationContext(),
-                    AppDatabase.class, "jwth_bracelet").build();
+                    AppDatabase.class, "jwth_bracelet.db").build();
         }
 
         return mAppDatabase;

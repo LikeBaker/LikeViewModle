@@ -31,6 +31,7 @@ class BraceletDataResponse {
                 super.run();
                 List<BraceletLocalData> all = braceletDao.getAll();
                 Log.d("BraceletDataResponse", "all:" + all);
+                braceletDao.insertAll(new BraceletLocalData(1, "5", "6"));
             }
         };
 

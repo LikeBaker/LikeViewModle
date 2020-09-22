@@ -24,7 +24,7 @@ public interface BraceletDao {
     BraceletLocalData findByName(String bracelet_step, String temperature);
 
     @Insert
-    void insertAll(BraceletLocalData... users);
+    void insertAll(BraceletLocalData... braceletLocalData);
 
     @Delete
     void delete(BraceletLocalData user);

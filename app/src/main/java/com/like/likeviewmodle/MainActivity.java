@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.like.likeviewmodle.room.AppDatabase;
 import com.like.likeviewmodle.room.BraceletLocalData;
+import com.like.likeviewmodle.room.DbHelper;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView content;
     private BraceletData mBraceletData;
     private BraceletDataResponse braceletDataResponse;
+    private AppDatabase instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         content = findViewById(R.id.tv_content);
-
-
 
 //        mViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BraceletDataModule.class);
 //        mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(BraceletDataModule.class);
@@ -59,17 +60,6 @@ public class MainActivity extends AppCompatActivity {
         mBraceletData = new BraceletData("1", "2");
         braceletLiveData.setValue(mBraceletData);//这里初始化了，observe中的数据才有值
 
-//        Log.d("MainActivity", "getLifecycle().getCurrentState():" + getLifecycle().getCurrentState());
-//        getLifecycle().addObserver(new LifecycleEventObserver() {
-//            @Override
-//            public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
-//                Log.d("MainActivity", "onStateChanged");
-//                Log.d("MainActivity", source.toString());
-//                Log.d("MainActivity", event.toString());
-//            }
-//        });
-
-
         mViewModel.getBraceletLiveData().observe(this, new Observer<BraceletData>() {
             @Override
             public void onChanged(BraceletData braceletData) {
@@ -83,7 +73,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         braceletDataResponse = new BraceletDataResponse(this);
-        braceletDataResponse.setBraceletData(new BraceletLocalData(1, "1", "2"));
+        final BraceletLocalData braceletLocalData = new BraceletLocalData(1, "1", "2");
+        braceletDataResponse.setBraceletData(braceletLocalData);
+
+        //数据库room
+        instance = AppDatabase.getInstance(this);
+//        instance.braceletDao().insertAll();
+
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                instance.braceletDao().insertAll(braceletLocalData);
+                Log.d("MainActivity", "insert");
+            }
+        }.start();
 
     }
 
@@ -105,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
-                List<BraceletLocalData> braceletData = braceletDataResponse.getBraceletData();
-                Log.d("MainActivity", "braceletData:" + braceletData);
+                List<BraceletLocalData> braceletData = instance.braceletDao().getAll();
+                Log.d("MainActivity", "braceletData:" + braceletData.get(0).uid);
             }
         }.start();
 
